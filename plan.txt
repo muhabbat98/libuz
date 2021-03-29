@@ -1,0 +1,16 @@
+1-kun
+database 
+graphql bn database uliymiz
+query chiqaramiz
+
+2-kun
+Mutation
+
+3-kun
+subscription
+
+4-kun
+front end
+
+5-kun 
+connection
