@@ -1,0 +1,25 @@
+{
+  "name": "ill",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muhabbat98/interlibraryloan.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/muhabbat98/interlibraryloan/issues"
+  },
+  "homepage": "https://github.com/muhabbat98/interlibraryloan#readme",
+  "dependencies": {
+    "apollo-server": "^2.19.2",
+    "graphql": "^15.5.0"
+  }
+}
