@@ -3,14 +3,19 @@ create extension pgcrypto;
 create table users(
     user_id serial primary key,
     username varchar(30) not null unique,
-    password varchar(45) not null,
-    is_admin boolean default false
+    password varchar(60) not null,
+    user_status smallint not null
 );
+INSERT INTO users(username, password, user_status) VALUES ('bmp', crypt('123', gen_salt('bf')), 1);
+INSERT INTO users(username, password, user_status) VALUES ('muazzam', crypt('123', gen_salt('bf')), 2);
+
 -- 02 libraries 
 create table libraries(
     library_id serial primary key,
     library_name varchar(64) not null
 );
+INSERT INTO libraries(library_name) VALUES ('milliy kutubxona');
+
 -- 03 librarians 
 create table librarians(
     librarian_id serial primary key,
@@ -20,6 +25,7 @@ create table librarians(
     librarian_phone varchar(13) not null,
     library_id int references libraries(library_id)
 );
+INSERT INTO librarians(user_id, first_name, last_name, librarian_phone, library_id) VALUES (2, 'Muazzam', 'Abduqahhorova', 99639852147, 1);
 
 --  04 reader roles  
 create table reader_roles(
