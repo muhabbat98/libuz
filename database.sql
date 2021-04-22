@@ -8,13 +8,17 @@ create table users(
 );
 INSERT INTO users(username, password, user_status) VALUES ('bmp', crypt('123', gen_salt('bf')), 1);
 INSERT INTO users(username, password, user_status) VALUES ('muazzam', crypt('123', gen_salt('bf')), 2);
+INSERT INTO users(username, password, user_status) VALUES ('muhabbat', crypt('123', gen_salt('bf')), 3);
+
 
 -- 02 libraries 
 create table libraries(
     library_id serial primary key,
     library_name varchar(64) not null
 );
+INSERT INTO libraries(library_name) VALUES ('all');
 INSERT INTO libraries(library_name) VALUES ('milliy kutubxona');
+
 
 -- 03 librarians 
 create table librarians(
@@ -32,29 +36,35 @@ create table reader_roles(
     reader_role_id serial primary key,
     reader_role varchar(64) not null
 );
+INSERT INTO reader_roles(reader_role) VALUES ('student');
 -- 05 reader 
 create table readers(
     reader_id serial primary key,
     user_id int references users(user_id),
     reader_email varchar(64),
-    reader_role int references reader_roles(reader_role_id),
+    reader_role_id int references reader_roles(reader_role_id),
     reader_phone varchar(13)
 );
+INSERT INTO readers(user_id, reader_email, reader_role_id, reader_phone) VALUES (3, 'bmp@com', 1, 99639852147);
+
 -- 06 themes of questions 
 create table themes (
     theme_id serial primary key,
     theme_name varchar(64)
 );
+INSERT INTO readers(user_id, reader_email, reader_role_id, reader_phone) VALUES (3, 'bmp@com', 1, 99639852147);
+
 -- 07 questions 
 create table questions(
     question_id serial primary key,
     reader_id int references readers(reader_id),
     theme_id int references themes(theme_id),
-    library_id int references libraries(library_id),
+    library_id int default null references libraries(library_id),
     question_text text not null,
     question_status smallint default 1,
     created_at timestamptz default current_timestamp 
 );
+INSERT INTO questions(reader_id, question_text) VALUES (1, '"hello"');
 
 -- 08 rooms 
 create table rooms (

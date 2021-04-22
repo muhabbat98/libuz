@@ -8,26 +8,47 @@ const typeDefs = gql`
     readers:[Reader]
   }
   type Admin{
-    admin_id: Int,
+    adminId: Int,
     username:String!,
     password:String!
   }
   type Librarian{
-    librarian_id: Int,
+    librarianId: Int,
     username:String,
     password:String,
     firstName:String,
     lastName:String,
-    librarianPhone:Int,
+    librarianPhone:String,
     library:String
   }
   type Reader{
-    reader_id: Int,
+    readerId: Int,
     username:String,
     password:String,
     readerEmail:String,
     readerRole:String,
-    readerPhone:Int
+    readerPhone:String
   }
+  type Mutation {
+    addAdmin( username:String!, password:String!):Admin
+    addLibrarian(
+		username:String,
+		password:String,
+		firstName:String,
+		lastName:String,
+		librarianPhone:String,
+		library:Int
+    ): Librarian
+	addReader(
+		username:String,
+		password:String,
+		readerEmail:String,
+		readerRole:Int,
+		readerPhone:String
+	):Reader
+    }
+	type Subscription{
+		newAdmin:Admin
+	}
 `
 module.exports = typeDefs

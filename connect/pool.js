@@ -13,7 +13,7 @@ class Model {
     constructor (){
         this.pool = this.pool||pool
     }
-     async query(SQL, parms){
+     async query(SQL, ...parms){
          const client = await pool.connect()
          try{
             return client.query(SQL, parms? parms :null) 
