@@ -34,9 +34,14 @@ const resolvers = {
 			const row = await users.addLibrarian(username, password, firstName, lastName, librarianPhone, library)
 			return row
 		},
-		addReader:async(_,{username, password, readerEmail, readerRole, readerPhone },context)=>{
+		addReader:async(_,{username, password, readerEmail, readerRole, readerPhone })=>{
 			const row = await users.addReader(username, password, readerEmail, readerRole, readerPhone)
-			return row
+		
+			return{
+				status:200,
+				token:sign({payload: row.reader_id}),
+				data:row
+			}
 		}
 		
     },

@@ -20,7 +20,8 @@ const resolvers = {
 		createdAt: global=>time(global.created_at)
 	},
 	Mutation:{
-		createQuestion:async(_ ,{readerId, theme,library, questionText})=>{
+		createQuestion:async(_ ,{readerId, theme,library, questionText}, {token})=>{
+			verify(token)
 			const [rows] = await questions.createQuestion(readerId, theme,library, questionText)
 			pubsub.publish("NEW_QUESTION", rows)
 			return rows

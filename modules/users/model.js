@@ -37,10 +37,10 @@ class UserModel extends Model{
         const  {rows:[user]} = await this.query("INSERT INTO users(username, password, user_status) VALUES ($1, crypt($2, gen_salt('bf')), 2) RETURNING user_id, username, password, user_status", username, password)
 
         // create reader 
-        const {rows:[reader]}= await this.query("INSERT INTO readers(user_id, reader_email, reader_role_id, reader_phone) VALUES ($1, $2, $3, $4) RETURNING reader_id", user.user_id, readerEmail, readerRole, readerPhone)
+        const {rows:[reader]}= await this.query("INSERT INTO readers(user_id, reader_email, reader_role_id, reader_phone) VALUES ($1, $2, $3, $4) RETURNING reader_id", user.user_id, readerEmail, readerRole||NULL, readerPhone)
 
         // join reader and reader_role and select all of them
-        const {rows:[read]}=await this.query("SELECT * FROM reader r INNER JOIN reader_roles rs ON r.reader_role_id= rs.reader_role_id AND r.reader_id=$1", reader.reader_id)
+        const {rows:[read]}=await this.query("SELECT * FROM readers r INNER JOIN reader_roles rs ON r.reader_role_id= rs.reader_role_id AND r.reader_id=$1", reader.reader_id)
 
         return{...user, ...read}
     }

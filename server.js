@@ -4,13 +4,22 @@ const http = require('http')
 const PORT = process.env.PORT||5000
 const user = require('./modules/users/index')
 const question = require('./modules/questions/index')
+const answers = require('./modules/answers')
 
 const modules  = [
     user,
-    question
+    question,
+    answers
 ]
 
-const server = new ApolloServer({modules,subscriptions: {  path: '/subscriptions'}})
+const server = new ApolloServer({modules,subscriptions: { path: '/subscriptions'},context:({req, connection})=>{
+  if(connection){
+    return({token: connection.context.token})
+  }
+  else{
+    return ({token:req.headers.token})}
+  }
+})
 
 server.applyMiddleware({app, path:'/ill'})
 const httpServer = http.createServer(app)

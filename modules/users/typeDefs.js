@@ -2,6 +2,7 @@
 const {  gql } = require('apollo-server')
 
 const typeDefs = gql`
+  scalar Response
   type Query {
     admins: [Admin],
     librarians:[Librarian],
@@ -45,7 +46,7 @@ const typeDefs = gql`
 		readerEmail:String,
 		readerRole:Int,
 		readerPhone:String
-	):Reader
+	):Response
     }
 	type Subscription{
 		newAdmin:Admin
