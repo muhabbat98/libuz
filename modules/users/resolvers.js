@@ -35,12 +35,37 @@ const resolvers = {
 			return row
 		},
 		addReader:async(_,{username, password, readerEmail, readerRole, readerPhone })=>{
-			const row = await users.addReader(username, password, readerEmail, readerRole, readerPhone)
-		
-			return{
-				status:200,
-				token:sign({payload: row.reader_id}),
-				data:row
+			try{
+				const row = await users.addReader(username, password, readerEmail, readerRole, readerPhone)
+				return{
+					status:200,
+					token:sign({payload: row.reader_id}),
+					data:row
+				}
+			}
+			catch(err){
+				return{
+					status:401,
+					message:err.message
+				}
+			}
+		},
+		loginReader:async(_,{username, password})=>{
+			
+			try{
+
+				const row = await users.checkReader(username, password)
+				return{
+					status:200,
+					token:sign({payload: row.reader_id}),
+					data:row
+				}
+			}
+			catch(err){
+				return{
+					status:401,
+					message:"auth error username or password invalid"
+				}
 			}
 		}
 		

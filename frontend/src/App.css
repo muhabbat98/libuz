@@ -1,0 +1,97 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.MuiTab-wrapper{
+  font-weight: bold;
+}
+.profile-menyu .MuiPaper-root{
+  background-color:#F3F3F3;
+  color:#3C1874
+}
+.login-form-input{
+    border:none;
+    outline: none;
+    padding: 10px;
+    font-size: 14px;
+    color: #3C1874;
+    border-bottom: 1px solid  #3C1874;
+}
+.login-form-input:hover{
+  border-bottom: 1px solid  #932432;
+}
+.login-form-input:placeholder-shown{
+  font-size: 14px;
+  color:  #283747;
+  margin-bottom: 10px;
+}
+.login-form-submit{
+    border:none;
+    outline: none;
+    color: #3C1874;
+    background-color: transparent;
+    padding-top: 15px;
+    display: block;
+    margin: 0 auto;
+    font-size: 14px;
+    font-weight: bolder;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+.login-form-submit:hover{
+  border:none;
+  outline: none;
+  color: #932432;
+}
+.login-form-submit:disabled{
+  color: #283747;
+  cursor:auto;
+}
+.login-password-error-label{
+  font-size: 10px;
+  color:red;
+}
+.loggin-text{
+  font-size: 20px;
+  font-weight: bold;
+  color: #3C1874;
+  padding: 15px 0px;
+  margin: 0 auto;
+}
+.login-error{
+  font-size: 10px;
+  color:red;
+}
+.login-form .MuiButtonBase-root{
+    padding: 9px;
+    font-size: 10px;
+}
+.login-form  .MuiFormControlLabel-label{
+  font-size: 14px;
+}
+.login-form .MuiIconButton-label{
+  width: 20px;
+  height: 20px;
+}
+.login-button{
+  background-color:transparent;
+  border:none;
+  outline: none;
+  color:white;
+  font-weight: bolder;
+  font-size: 16px;
+  cursor: pointer;
+}
+/* .reader-message-link{
+  color:#F3F3F3;
+} */

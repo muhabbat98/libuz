@@ -47,6 +47,10 @@ const typeDefs = gql`
 		readerRole:Int,
 		readerPhone:String
 	):Response
+	loginReader(
+		username:String,
+		password:String
+	):Response
     }
 	type Subscription{
 		newAdmin:Admin

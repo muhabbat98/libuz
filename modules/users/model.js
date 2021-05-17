@@ -34,14 +34,27 @@ class UserModel extends Model{
     async addReader (username, password, readerEmail, readerRole, readerPhone){
 
         // create user
-        const  {rows:[user]} = await this.query("INSERT INTO users(username, password, user_status) VALUES ($1, crypt($2, gen_salt('bf')), 2) RETURNING user_id, username, password, user_status", username, password)
+        const  {rows:[user]} = await this.query("INSERT INTO users(username, password, user_status) VALUES ($1, crypt($2, gen_salt('bf')), 3) RETURNING user_id, username, user_status", username, password)
 
         // create reader 
-        const {rows:[reader]}= await this.query("INSERT INTO readers(user_id, reader_email, reader_role_id, reader_phone) VALUES ($1, $2, $3, $4) RETURNING reader_id", user.user_id, readerEmail, readerRole||NULL, readerPhone)
-
+        const {rows:[reader]}= await this.query("INSERT INTO readers(user_id, reader_email, reader_role_id, reader_phone) VALUES ($1, $2, $3, $4) RETURNING reader_id, reader_role_id", user.user_id, readerEmail, readerRole, readerPhone)
+    
         // join reader and reader_role and select all of them
-        const {rows:[read]}=await this.query("SELECT * FROM readers r INNER JOIN reader_roles rs ON r.reader_role_id= rs.reader_role_id AND r.reader_id=$1", reader.reader_id)
+        if(reader.reader_role_id){
+           const {rows:read}=await this.query("SELECT * FROM readers r INNER JOIN reader_roles rs ON rs.reader_role_id= $1 AND r.reader_id=$2",reader.reader_role_id, reader.reader_id) 
+           return{...user, ...read}
+        }
+        else{
+            const {rows:read}=await this.query("SELECT * FROM readers r WHERE r.reader_id=$1", reader.reader_id) 
+            return{...user, ...read}
+        }
+        
+    }
+    async checkReader(username, password){
+    
+        const {rows:[user]} = await this.query("SELECT user_id, user_status FROM users WHERE username=$1 AND password=crypt($2, password) AND user_status=3", username,password)
 
+        const {rows:[read]}=await this.query("SELECT * FROM readers r LEFT JOIN reader_roles rr ON r.reader_role_id= rr.reader_role_id WHERE r.user_id=$1;", user.user_id) 
         return{...user, ...read}
     }
 }

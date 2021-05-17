@@ -1,8 +1,12 @@
 
 const {  gql } = require('apollo-server')
 const typeDefs = gql`
+  scalar roomList
   extend type Query{
-    questions:[Question]
+    questions(questionId:Int):[Question]
+    libUnread(readerId:Int):[Question],
+    readerUnread(readerId:Int):roomList
+    readerRooms(readerId:Int):[roomList]
   }
   type Question{
     questionId: Int,

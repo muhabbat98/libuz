@@ -57,30 +57,31 @@ INSERT INTO readers(user_id, reader_email, reader_role_id, reader_phone) VALUES 
 -- 07 questions 
 create table questions(
     question_id serial primary key,
-    reader_id int references readers(reader_id),
+    reader_id int not null references readers(reader_id),
     theme_id int references themes(theme_id),
     library_id int default null references libraries(library_id),
-    question_text text not null,
-    question_status smallint default 1,
-    created_at timestamptz default current_timestamp 
+    question_text not null text not null,
+    question_status not null smallint default 1,
+    created_at timestamptz default current_timestamp
 );
 INSERT INTO questions(reader_id, question_text) VALUES (1, '"hello"');
 
 -- 08 rooms 
 create table rooms (
     room_id serial primary key,
-    librarian_id int references librarians(librarian_id),
-    reader_id int references readers(reader_id)
+    librarian_id not null int references librarians(librarian_id),
+    reader_id not null int references readers(reader_id)
 );
 
 -- 09 answers
 create table answers(
     answer_id serial primary key,
-    question_id int references questions(question_id),
-    librarian_id int references librarians(librarian_id),
-    room_id int references rooms(room_id),
+    question_id int references not null questions(question_id),
+    librarian_id int not null references librarians(librarian_id),
+    room_id int references not null rooms(room_id),
     answer_text varchar not null,
-    created_at timestamptz default current_timestamp
+    created_at timestamptz not null default current_timestamp,
+    isreaded boolean default false not null 
 );
 --10 likes
 create table likes(

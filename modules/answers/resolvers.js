@@ -6,11 +6,18 @@ const time = val=>moment().fromNow(val)
 
 const answers = new AnswerModel()
 const resolvers = {
- 
+	Query :{
+		rooms:(_, {roomId})=> answers.oneRoom(roomId),
+		unreaded: ()=>answers.unreaded()
+	},
     Mutation:{
 		createRoom:async(_, {questionId, librarianId})=>{
-				const [row ] = await answers.createRoom(questionId, librarianId)
-				return row.room_id
+				const [row]= await answers.createRoom(questionId, librarianId)
+				return row
+		},
+		createAnswer:async(_, {questionId, answerText, librarianId})=>{
+			const [row]= await answers.createAnswer(questionId, answerText, librarianId)
+			return row
 		}
     }
 
