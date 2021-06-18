@@ -5,7 +5,7 @@ const typeDefs = gql`
   scalar Response
   type Query {
     admins: [Admin],
-    librarians:[Librarian],
+    librarians(librarianId:Int):[Librarian],
     readers:[Reader]
   }
   type Admin{
@@ -39,7 +39,7 @@ const typeDefs = gql`
 		lastName:String,
 		librarianPhone:String,
 		library:Int
-    ): Librarian
+    ): Response
 	addReader(
 		username:String,
 		password:String,

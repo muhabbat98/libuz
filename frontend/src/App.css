@@ -87,11 +87,21 @@ code {
   background-color:transparent;
   border:none;
   outline: none;
-  color:white;
-  font-weight: bolder;
+  color:white !important;
+  font-weight: bolder !important;
   font-size: 16px;
   cursor: pointer;
 }
-/* .reader-message-link{
-  color:#F3F3F3;
-} */
+
+.room-messages> div:last-child{
+    margin-bottom: 60px;
+}
+.book-cover-image{
+  width:230px;
+  height: 310px;
+}
+.book-cover-image img{
+  width:230px;
+  height: 310px;
+  object-fit: cover;
+}

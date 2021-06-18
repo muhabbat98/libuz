@@ -5,7 +5,7 @@ const users = new UserModel()
 const resolvers = {
     Query: {
       admins: async() => users.admins(),
-      librarians:()=>users.librarians(),
+      librarians:(_,{librarianId})=>users.librarians(librarianId),
       readers:()=>users.readers()
     },
     Admin: {
@@ -31,8 +31,21 @@ const resolvers = {
 			return row
 		},
 		addLibrarian:async(_,{username, password, firstName, lastName, librarianPhone, library },context)=>{
-			const row = await users.addLibrarian(username, password, firstName, lastName, librarianPhone, library)
-			return row
+			try{
+				const row = await users.addLibrarian(username, password, firstName, lastName, librarianPhone, library)
+				return{
+					status:200,
+					token:sign({payload: row.librarian_id}),
+					data:row
+				}
+			}
+			catch(err){
+				return{
+					status:401,
+					message:err.message
+				}
+			}
+			
 		},
 		addReader:async(_,{username, password, readerEmail, readerRole, readerPhone })=>{
 			try{

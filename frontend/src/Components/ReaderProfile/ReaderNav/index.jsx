@@ -32,7 +32,7 @@ export default function PrimarySearchAppBar({data}) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    console.log("user reader room",data.readerUnread.length)
+    
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -52,7 +52,15 @@ export default function PrimarySearchAppBar({data}) {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+  const logOut = ()=>{
+    window.localStorage.removeItem('usertype')
+    window.localStorage.removeItem('token')
+    window.localStorage.removeItem('readerId')
+    window.location.reload(false);
+    setAnchorEl(null);
+    handleMobileMenuClose();
 
+  }
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -66,6 +74,8 @@ export default function PrimarySearchAppBar({data}) {
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={logOut}>Log Out</MenuItem>
+
     </Menu>
   );
 
@@ -98,6 +108,18 @@ export default function PrimarySearchAppBar({data}) {
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
+      </MenuItem>
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton
+          aria-label="log out user"
+          aria-controls="primary-search-account-menu"
+          aria-haspopup="true"
+          color="inherit"
+          onClick={logOut}
+        >
+          <AccountCircle />
+        </IconButton>
+        <p>Log out</p>
       </MenuItem>
     </Menu>
   );

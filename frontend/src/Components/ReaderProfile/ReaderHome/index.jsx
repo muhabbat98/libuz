@@ -1,25 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import PhoneIcon from '@material-ui/icons/Phone';
-import FavoriteIcon from '@material-ui/icons/Favorite';
 import PersonPinIcon from '@material-ui/icons/PersonPin';
 import HelpIcon from '@material-ui/icons/Help';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
-import ThumbDown from '@material-ui/icons/ThumbDown';
-import ThumbUp from '@material-ui/icons/ThumbUp';
 import Send from '@material-ui/icons/Send';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import ReaderQuestion from '../NewQuestion'
 import{ READER_ROOMS} from '../../../Graphql/Queries'
 import { useQuery } from '@apollo/client';
 import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import ReaderRoom from '../ReaderRooms/index'
+import ReaderRoom from '../ReaderRooms'
+import OtherQuestion from'../OtherQuestion'
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
 
@@ -33,7 +28,7 @@ function TabPanel(props) {
 		>
 		{value === index && (
 			<Box p={3}>
-			<Typography>{children}</Typography>
+				<>{children}</>
 			</Box>
 		)}
 		</div>
@@ -58,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     width: '100%',
     backgroundColor: theme.palette.background.paper,
+	padding:0
   },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
@@ -67,18 +63,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ScrollableTabsButtonForce() {
 	const classes = useStyles();
-	const [value, setValue] = React.useState(0);
-	const {loading, error, data} = useQuery(READER_ROOMS, {variables:{readerId:2}})
-	// const {loading, error, data} = useQuery(READER_ROOMS, { variables: {readerId: localStorage.getItem('readerId') ? parseInt(localStorage.getItem('readerId')):null}})
-	// console.log(data)
+	const [value, setValue] = useState(0);
+	const [index, setIndex] = useState(-1)
+	const {loading,  data} = useQuery(READER_ROOMS, { variables: {readerId:parseInt(localStorage.getItem("readerId"))}})
+
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
-	};
-	console.log("error",error)
-	// console.log("data",data.readerRooms)
-	console.log("loading",loading)
-
-
+	}
+	useEffect(()=>{
+		data ? setIndex(data.readerRooms.length - 1) :setIndex(-1)
+		// console.log("reader room data",data)
+	},[data])
   return (
 	<>
 		{ loading ? 
@@ -99,39 +94,28 @@ export default function ScrollableTabsButtonForce() {
 					>
 						{data&&data.readerRooms? 
 							data.readerRooms.map((room, index)=> 
-							<Tab label={"room "+(index)} icon={<PersonPinIcon />}{...a11yProps(index)} />)
+							{	
+								return(<Tab label={"room "+(index)} icon={<PersonPinIcon />}{...a11yProps(index)} />)}
+							)
 						:<></>}
-						<Tab label="Item Two" icon={<FavoriteIcon />} {...a11yProps(1)} />
-						<Tab label="Item Three" icon={<PersonPinIcon />} {...a11yProps(2)} />
-						<Tab label="Item Four" icon={<HelpIcon />} {...a11yProps(3)} />
-						<Tab label="Item Five" icon={<ShoppingBasket />} {...a11yProps(4)} />
-						<Tab label="Item Six" icon={<ThumbDown />} {...a11yProps(5)} />
-						<Tab label="Send Question" icon={<Send/>} {...a11yProps(6)} />
+						<Tab label="Other Question" icon={<HelpIcon />} {...a11yProps(index+1)} />
+						<Tab label="Send Question" icon={<Send/>} {...a11yProps(index+2)} />
 					</Tabs>
 				</AppBar>
-				{data&&data.readerRooms? 
-					data.readerRooms.map((room, index)=> 
-						<TabPanel value={value} index={index}>
-							<ReaderRoom roomData = {room}/>
-						</TabPanel>)
-				:<></>}
-				
-				<TabPanel value={value} index={1}>
-				Item Two
+				{
+					data&&data.readerRooms ? 
+					(	data.readerRooms.map((room, ind)=> 
+									<TabPanel value={value} index={ind}>
+										<ReaderRoom roomData = {room}/>
+									</TabPanel>
+						))
+					:<></>
+				}
+			
+				<TabPanel value={value} index={index+1}>
+					<OtherQuestion/>
 				</TabPanel>
-				<TabPanel value={value} index={2}>
-				Item Three
-				</TabPanel>
-				<TabPanel value={value} index={3}>
-				Item Four
-				</TabPanel>
-				<TabPanel value={value} index={4}>
-				Item Five
-				</TabPanel>
-				<TabPanel value={value} index={5}>
-				Item Six
-				</TabPanel>
-				<TabPanel value={value} index={6}>
+				<TabPanel value={value} index={index+2}>
 					<ReaderQuestion/>
 				</TabPanel>
 			</div>

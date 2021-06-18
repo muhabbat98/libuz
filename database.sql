@@ -89,3 +89,52 @@ create table likes(
     answer_id int references answers(answer_id),
     reader_id int references readers(reader_id)
 );
+create table book_image(
+    image_id serial primary key not null,
+    filename varchar not null,
+    mimetype varchar(60),
+    path varchar
+);
+create table book_file (
+    file_id serial primary key,
+    filename varchar not null,
+    mimetype varchar(60),
+    path varchar
+);
+INSERT INTO book_image (filename, mimetype, path) VALUES ($1, $2, $3) ;
+INSERT INTO book_file (filename, mimetype, path) VALUES ($1, $2, $3) 
+
+
+
+create table fields(
+    fiel_id serial primary key,
+    title varchar not null,
+    file_id int references book_file (file_id),
+    image_id int references book_image(image_id),
+    subject text,
+    description text,
+    type varchar(64),
+    source varchar,
+    relation text,
+    coverage varchar(64),
+    creator varchar(64),
+    publisher varchar,
+    contributor varchar,
+    rights varchar,
+    date timestamptz,
+    format varchar(64),
+    identifier varchar(256),
+    language varchar(64),
+    audience text,
+    provenance varchar,
+    right_holders varchar(64),
+    instructional_method varchar(64),
+    accrual_method varchar(64),
+    accrual_periodicity varchar(64),
+    accrual_policy varchar(64)
+);
+create table countOfDownloads(
+    download_id serial primary key,
+    file_id int references book_file (file_id),
+    count int not null default 1
+);

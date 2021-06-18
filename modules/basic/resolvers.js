@@ -8,7 +8,8 @@ const basic = new BasicModel()
 const resolvers = {
 	Query :{
 		lib:()=> basic.libraries(),
-		themes:()=>basic.themes()
+		themes:()=>basic.themes(),
+		readerRoles:()=>basic.readerRole()
 	},
 	Library:{
 		libraryId:(global)=>global.library_id,
@@ -17,7 +18,12 @@ const resolvers = {
 	Theme:{
 		themeId:global=>global.theme_id,
 		themeName: global=>global.theme_name
+	},
+	ReaderRole:{
+		roleId:global=>global.reader_role_id,
+		roleName:global=>global.reader_role
 	}
+
 
   };
   module.exports = resolvers

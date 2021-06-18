@@ -38,7 +38,7 @@ export default function BasicTextFields() {
     useEffect(()=>{
         (async()=>{
             try{
-                console.log("reader Data", await data)
+                
                 
                 let token = await data.loginReader.token
                 let readerId = await data.loginReader.data.reader_id

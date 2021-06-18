@@ -3,7 +3,11 @@ import { useContext,useState,createContext } from 'react'
 const UserContext = createContext(null)
 
 const UserProvider = ({children})=>{
-    const [user, setUser]= useState({token:localStorage.getItem('token')||'', userType:localStorage.getItem('usertype')||'', id:localStorage.getItem('readerId')||''})
+    const [user, setUser]= useState( {
+        token:localStorage.getItem('token')||'',
+        userType:localStorage.getItem('usertype')||'',
+        id:localStorage.getItem('readerId')||localStorage.getItem('librarianId')||''})
+        
     return(
          <UserContext.Provider value= {{user, setUser}}>
              <UserContext.Consumer>

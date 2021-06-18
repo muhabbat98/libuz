@@ -7,6 +7,8 @@ const typeDefs = gql`
     libUnread(readerId:Int):[Question],
     readerUnread(readerId:Int):roomList
     readerRooms(readerId:Int):[roomList]
+    notAnsweredQuestion(readerId:Int):[Question],
+    notAnsweredRoom(roomId:Int):[Question]
   }
   type Question{
     questionId: Int,
@@ -19,9 +21,11 @@ const typeDefs = gql`
   }
    extend type Mutation {
      createQuestion( readerId:Int, theme:Int,  library:Int, questionText: String,): Question
+     roomQuestion(roomId:Int, questionText:String):roomList
    }
    extend type Subscription{
-     newQuestion:Question
+     newQuestion:Question,
+     newRoomQuestion(roomId:Int):roomList
    }
 `
 module.exports = typeDefs

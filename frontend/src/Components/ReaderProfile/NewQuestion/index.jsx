@@ -1,4 +1,4 @@
-import React,{useEffect, useRef, useState} from 'react';
+import React,{ useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -10,6 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { Typography } from '@material-ui/core';
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { useQuery, useMutation } from '@apollo/client';
 import {LIBRARIES,THEMES} from '../../../Graphql/Queries'
 import {READER_CREATE_QUESTION} from '../../../Graphql/Mutation'
@@ -21,12 +23,11 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       margin: '0 auto',
       width: "60%",
-      height: '50vh',
+      minHeight: '50vh',
       padding:'3rem'
     },
   },
   button: {
-    margin: 8,
     margin:'0 auto'
   },
   send_message_parent:{
@@ -48,18 +49,22 @@ const useStyles = makeStyles((theme) => ({
       color:'#FBEEC1',
       background:'#659DBD',
       fontSize:"1.2em"
-  }
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
 }));
 
 export default function SimplePaper() {
     const classes = useStyles();
     const [lib, setLib] = React.useState('');
     const [theme, setTheme] = React.useState('');
-    const { loading:lib_loading, error:lib_error, data:lib_data } = useQuery(LIBRARIES);
-    const { loading:theme_loading, error:theme_error, data:theme_data } = useQuery(THEMES);   
+    const { loading:lib_loading,  data:lib_data } = useQuery(LIBRARIES);
+    const { loading:theme_loading, data:theme_data } = useQuery(THEMES);   
     const [createQuestion,{data:question_data}] = useMutation(READER_CREATE_QUESTION);
     const [text, setText] = useState({text:'', blured:false})
-   
+  
     const handleChange = (event) => {
         setLib(event.target.value);
     };
@@ -70,7 +75,7 @@ export default function SimplePaper() {
     const sendQuestion = ()=>{
         let readerId = localStorage.getItem('readerId')
         if(text.text.length&& readerId){
-            createQuestion({ variables: { readerId:parseInt(readerId), questionText: text.text, theme:theme.length? theme:null, library:lib.length? lib:null } })
+            createQuestion({ variables: { readerId:parseInt(readerId), questionText: text.text, theme:theme? theme:null, library: lib ? parseInt(lib) : null } })
         }        
     }
     const textBlured = (e)=>{
@@ -79,7 +84,10 @@ export default function SimplePaper() {
    
    
   return (<>
-        {lib_loading||theme_loading? <>Loading</>:
+        {lib_loading||theme_loading?
+            <Backdrop className={classes.backdrop} open={true}  >
+				<CircularProgress color="inherit" />
+			</Backdrop>:
             <div className={classes.root}>
                 <Paper elevation={3} className={classes.send_message_parent}> 
                     <Typography variant="h4" component="h2">
@@ -136,7 +144,7 @@ export default function SimplePaper() {
                         </Grid>
                         <Grid  container>
                             <Grid item xs={10}>
-                               <form noValidate autoComplete="off">
+                              
                                     {(text.blured&&(!text.text.length))? 
                                             <TextField
                                                 error
@@ -158,10 +166,6 @@ export default function SimplePaper() {
                                                 onBlur={textBlured}
                                             />
                                         }
-
-                               </form>
-                              
-        
                             </Grid>
                             <Grid item xs={2}>
                                 <Button
